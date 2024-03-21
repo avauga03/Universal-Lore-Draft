@@ -1,3 +1,4 @@
-#US:hover, #CA:hover {
-    fill: #cccccc;
+/* the colour of the hover when you go over the country */
+.hover-effect {
+    fill: #82f536; 
 }
