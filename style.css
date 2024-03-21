@@ -2,3 +2,10 @@
 .hover-effect {
     fill: #8ee629; 
 }
+
+svg {
+    width: 80vw; /* This is make sure the width is at 80% */
+    height: auto; /* This is to maintain the height across different screens */
+    display: block;
+    margin: 0 auto; /* This is to put the SVG in the centre of the screen horizontally */
+}
