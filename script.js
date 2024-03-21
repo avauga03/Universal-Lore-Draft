@@ -3,6 +3,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const svgMap = document.querySelector('#svg-map');
 
 /* there was an error in the console before, putting if (!svgMap) made sure the ID svg-map was picked up */
+/* I think there was a timing issue, the document.querySelector('#svg-map') is trying to find the svg-map ID in HTML, before the SVG is placed in the DOM 
+/* this comes from truthy or falsy, the ! means if svgMap is not true (hence the error)
+/* in case of svgmap is missing missed, i used a retun, going by the error meesage https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/return */
+/* the return; statement exits the function, preventing any further code that depends on svgMap if false */
+
     if (!svgMap) {
         console.error('SVG map not found!');
         return;
