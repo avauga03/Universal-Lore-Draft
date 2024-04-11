@@ -8,10 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
 /* in case of svgmap is missing missed, i used a retun, going by the error meesage https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/return */
 /* the return; statement exits the function, preventing any further code that depends on svgMap if false */
 
-    if (!svgMap) {
-        console.error('SVG map not found!');
-        return;
-    }
+
 
 /*  querySelectorAll() method is a JavaScript method from the DOM API that allows you to retrieve all elements that match the query parameter passed to the method. */
 /* https://sebhastian.com/javascript-queryselectorall/ */
