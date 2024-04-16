@@ -28,11 +28,15 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-
 document.addEventListener('DOMContentLoaded', function() {
     // Fetch the book data from the JSON file
-    fetch('bookdata.json')
-        .then(response => response.json())
+    fetch('https://avauga03.github.io/Universal-Lore-Draft/bookdata.json')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok: ' + response.statusText);
+            }
+            return response.json();
+        })
         .then(data => {
             // Save the fetched data to a variable
             var bookData = data;
@@ -66,7 +70,6 @@ function displayBooksForCountry(countryId, bookData) {
     const continent = findContinentForCountry(countryId, bookData);
 
     // Get the books for the selected country and continent
-    // Assuming each continent has the same set of genres
     const genres = Object.keys(bookData[continent]);
 
     // Clear the previous book information
@@ -77,7 +80,7 @@ function displayBooksForCountry(countryId, bookData) {
     genres.forEach(genre => {
         const books = bookData[continent][genre];
         const countryBooks = books.filter(book => book.country === countryId);
-        
+
         // Add each book to the display
         countryBooks.forEach(book => {
             const bookElement = document.createElement('div');
@@ -90,9 +93,16 @@ function displayBooksForCountry(countryId, bookData) {
 
 function findContinentForCountry(countryId, bookData) {
     // This function determines the continent for the given country
-    // It's a stub and needs to be implemented based on your data structure
-    // For now, it just returns 'Africa' for example purposes
-    return 'Africa';
+    // Implement your logic to find the continent based on countryId
+    for (let continent in bookData) {
+        let genres = bookData[continent];
+        for (let genre in genres) {
+            if (genres[genre].some(book => book.country === countryId)) {
+                return continent;
+            }
+        }
+    }
+    return null; // Return null if no continent is found (should handle this case in your UI)
 }
 
 // Make sure you have an element with the ID 'book-info' in your HTML to display the book information
