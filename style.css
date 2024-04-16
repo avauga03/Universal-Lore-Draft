@@ -1,6 +1,60 @@
+/* This is the navigation bar that needs to be consistent */
+body, h1, h2, h3, p, ul, li, a {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    text-decoration: none;
+    list-style: none;
+    font-weight: normal; 
+  }
+  /* this is turn the top navbar purple */
+  .topnav {
+    align-items: center;
+    background-color: #34B233;
+    display: flex;
+    justify-content: space-between;
+    justify-content: flex-end;
+    overflow: hidden;
+    padding: 10px 20px;
+    text-align: center;
+  }
+  
+  /* ths is show how the website name to look, in terms of having a larger size and a white colour (against the purple background) 4B33FF */
+  .website-name {
+    text-decoration: none;
+    font-size: 42px;
+    font-weight: bold;
+    margin-right: auto;
+  }
+    
+  /*this is to change the button specifically to gold */
+  .nav-items a.button {
+    background-color: #2E38FF;
+    color: #000000;
+    font-weight: bold;
+    padding: 3px 30px;
+    margin-right: 18px;
+    border-radius: 14px;
+    font-size: 24px
+  }
+
+  /* website name is grey */
+  .topnav a.website-name{
+    color: #37424A;
+  }
+  /* text turns black when hovered over */
+  .topnav a:hover {
+    color: black;
+  }
+  
+/*THIS IS THE END OF THE NAVIGATION BAR*/
+
+
+
 /* the colour of the hover when you go over the country */
 .hover-effect {
-    fill: #8ee629; 
+    fill: #34B233; 
 }
 
 svg {
