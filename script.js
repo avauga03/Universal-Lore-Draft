@@ -29,8 +29,8 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Fetch the book data from the JSON file
-    fetch('https://avauga03.github.io/Universal-Lore-Draft/bookdata.json')
+    const url = 'https://avauga03.github.io/Universal-Lore-Draft/assets/bookdata.json';
+    fetch(url)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok: ' + response.statusText);
@@ -38,24 +38,23 @@ document.addEventListener('DOMContentLoaded', function() {
             return response.json();
         })
         .then(data => {
-            // Save the fetched data to a variable
-            var bookData = data;
-
-            // Add click event listeners to each country path in the SVG map
-            const svgMap = document.querySelector('#svg-map');
-            svgMap.querySelectorAll('path').forEach(function(path) {
-                path.addEventListener('mouseenter', highlightCountry);
-                path.addEventListener('mouseleave', removeHighlight);
-                path.addEventListener('click', function() {
-                    // Display book information based on the country ID
-                    displayBooksForCountry(this.id, bookData);
-                });
-            });
+            initializeMapInteractions(data);
         })
         .catch(error => {
             console.error('Error fetching the book data:', error);
         });
 });
+
+function initializeMapInteractions(bookData) {
+    const svgMap = document.querySelector('#svg-map');
+    svgMap.querySelectorAll('path').forEach(function(path) {
+        path.addEventListener('mouseenter', highlightCountry);
+        path.addEventListener('mouseleave', removeHighlight);
+        path.addEventListener('click', function() {
+            displayBooksForCountry(this.id, bookData);
+        });
+    });
+}
 
 function highlightCountry() {
     this.classList.add('hover-effect');
@@ -66,43 +65,7 @@ function removeHighlight() {
 }
 
 function displayBooksForCountry(countryId, bookData) {
-    // Determine which continent the country belongs to
-    const continent = findContinentForCountry(countryId, bookData);
-
-    // Get the books for the selected country and continent
-    const genres = Object.keys(bookData[continent]);
-
-    // Clear the previous book information
+    // Example: This function needs real implementation details based on your JSON structure
     const bookInfoDiv = document.querySelector('#book-info');
-    bookInfoDiv.innerHTML = '';
-
-    // Create and append new book information
-    genres.forEach(genre => {
-        const books = bookData[continent][genre];
-        const countryBooks = books.filter(book => book.country === countryId);
-
-        // Add each book to the display
-        countryBooks.forEach(book => {
-            const bookElement = document.createElement('div');
-            bookElement.className = 'book';
-            bookElement.textContent = `${book.title} by ${book.author} (${book.year})`;
-            bookInfoDiv.appendChild(bookElement);
-        });
-    });
+    bookInfoDiv.innerHTML = `<p>Books for ${countryId}</p>`; // Placeholder content
 }
-
-function findContinentForCountry(countryId, bookData) {
-    // This function determines the continent for the given country
-    // Implement your logic to find the continent based on countryId
-    for (let continent in bookData) {
-        let genres = bookData[continent];
-        for (let genre in genres) {
-            if (genres[genre].some(book => book.country === countryId)) {
-                return continent;
-            }
-        }
-    }
-    return null; // Return null if no continent is found (should handle this case in your UI)
-}
-
-// Make sure you have an element with the ID 'book-info' in your HTML to display the book information
