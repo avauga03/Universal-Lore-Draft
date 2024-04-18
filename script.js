@@ -9,8 +9,14 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(data => {
             svgMap.querySelectorAll('path').forEach(path => {
                 // Hover effects
-                path.addEventListener('mouseenter', () => path.classList.add('hover-effect'));
-                path.addEventListener('mouseleave', () => path.classList.remove('hover-effect'));
+                path.addEventListener('mouseenter', () => {
+                    // Highlight all paths that belong to the same country
+                    svgMap.querySelectorAll(`[data-country="${path.dataset.country}"]`).forEach(p => p.classList.add('hover-effect'));
+                });
+                path.addEventListener('mouseleave', () => {
+                    // Remove highlight from all paths that belong to the same country
+                    svgMap.querySelectorAll(`[data-country="${path.dataset.country}"]`).forEach(p => p.classList.remove('hover-effect'));
+                });
 
                 // Click event to show books for the country
                 path.addEventListener('click', function() {
@@ -31,13 +37,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function displayBooksForCountry(country, bookData, bookInfoDiv, genre) {
     const continent = findContinentForCountry(country, bookData);
-    bookInfoDiv.innerHTML = ''; // Clear previous data
+    bookInfoDiv.innerHTML = `<h2>Country: ${country}</h2>`; // Display country at the top
     if (continent) {
         const books = bookData[continent][genre] || [];
-        const filteredBooks = books.filter(book => book.country === country); // Filter books specific to the country
+        const filteredBooks = books.filter(book => book.country === country);
         if (filteredBooks.length > 0) {
-            // Add country name at the top
-            bookInfoDiv.innerHTML += `<h2>Country: ${country}</h2>`;
             filteredBooks.forEach(book => {
                 const bookElement = document.createElement('div');
                 bookElement.className = 'book';
@@ -56,8 +60,22 @@ function displayBooksForCountry(country, bookData, bookInfoDiv, genre) {
             bookInfoDiv.innerHTML += `<p>No books found for ${genre} in ${country}.</p>`;
         }
     } else {
-        bookInfoDiv.innerHTML = `<p>No continent data available for ${country}.</p>`;
+        bookInfoDiv.innerHTML += `<p>No continent data available for ${country}.</p>`;
     }
+}
+
+function highlightCountriesByGenre(genre, bookData, svgMap) {
+    svgMap.querySelectorAll('.genre-highlight').forEach(path => path.classList.remove('genre-highlight'));
+    Object.keys(bookData).forEach(continent => {
+        const genreBooks = bookData[continent][genre];
+        if (genreBooks) {
+            genreBooks.forEach(book => {
+                svgMap.querySelectorAll(`[data-country="${book.country}"]`).forEach(path => {
+                    path.classList.add('genre-highlight');
+                });
+            });
+        }
+    });
 }
 
 function findContinentForCountry(country, bookData) {
@@ -67,19 +85,4 @@ function findContinentForCountry(country, bookData) {
         }
     }
     return null; // Return null if no continent is found
-}
-
-function highlightCountriesByGenre(genre, bookData, svgMap) {
-    svgMap.querySelectorAll('.genre-highlight').forEach(path => path.classList.remove('genre-highlight'));
-    Object.keys(bookData).forEach(continent => {
-        const genreBooks = bookData[continent][genre];
-        if (genreBooks) {
-            genreBooks.forEach(book => {
-                const countryPath = svgMap.querySelector(`[data-country="${book.country}"]`);
-                if (countryPath) {
-                    countryPath.classList.add('genre-highlight');
-                }
-            });
-        }
-    });
 }
