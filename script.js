@@ -42,7 +42,7 @@ function displayBooksForCountry(country, bookData, bookInfoDiv, genre) {
                 const bookElement = document.createElement('div');
                 bookElement.className = 'book';
                 bookElement.innerHTML = `
-                    <strong>Rank:</strong> ${book.rank}<br>
+                    <strong>Popularity Rank in Continent:</strong> ${book['Popularity Rank in Continent']}<br>
                     <strong>Title:</strong> ${book.title}<br>
                     <strong>Author:</strong> ${book.author}<br>
                     <strong>Rating:</strong> ${book.rating} Stars<br>
@@ -59,6 +59,7 @@ function displayBooksForCountry(country, bookData, bookInfoDiv, genre) {
         bookInfoDiv.innerHTML = `<p>No continent data available for ${country}.</p>`;
     }
 }
+
 
 function findContinentForCountry(country, bookData) {
     for (let continent in bookData) {
