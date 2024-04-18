@@ -1,39 +1,59 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const svgMap = document.querySelector('#svg-map');
-    const bookInfoDiv = document.querySelector('#book-info');
-    const genreSelect = document.querySelector('#genre-select');
+    fetch('https://avauga03.github.io/Universal-Lore-Draft/assets/bookdata.json')
+        .then(response => response.json()) // Assumes response is always OK for simplicity
+        .then(data => {
+            const svgMap = document.querySelector('#svg-map');
+            const bookInfoDiv = document.querySelector('#book-info');
+            const genreSelect = document.querySelector('#genre-select');
 
-    if (svgMap && bookInfoDiv && genreSelect) {
-        fetch('https://avauga03.github.io/Universal-Lore-Draft/assets/bookdata.json')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok: ' + response.statusText);
-                }
-                return response.json();
-            })
-            .then(data => {
-                svgMap.querySelectorAll('path').forEach(path => {
-                    path.addEventListener('mouseenter', function() {
-                        this.classList.add('hover-effect');
-                    });
-                    path.addEventListener('mouseleave', function() {
-                        this.classList.remove('hover-effect');
-                    });
-                    path.addEventListener('click', function() {
-                        svgMap.querySelectorAll('path').forEach(p => p.classList.remove('selected'));
-                        this.classList.add('selected'); // Add 'selected' class for visual feedback
-
-                        const continent = findContinentForCountry(this.id, data);
-                        if (continent) {
-                            displayBooksForCountry(this.id, data[continent], bookInfoDiv, genreSelect.value);
-                        } else {
-                            bookInfoDiv.innerHTML = `<p>No book information available for ${this.id}</p>`;
-                        }
-                    });
-                });
-            })
-            .catch(error => {
-                console.error('Error fetching the book data:', error);
+            svgMap.querySelectorAll('path').forEach(path => {
+                path.addEventListener('mouseenter', () => path.classList.add('hover-effect'));
+                path.addEventListener('mouseleave', () => path.classList.remove('hover-effect'));
+                path.addEventListener('click', () => displayBooksForCountry(path.id, data, bookInfoDiv, genreSelect.value));
             });
-    }
+
+            genreSelect.addEventListener('change', () => {
+                const selectedPath = svgMap.querySelector('.selected');
+                if (selectedPath) {
+                    displayBooksForCountry(selectedPath.id, data, bookInfoDiv, genreSelect.value);
+                }
+            });
+        })
+        .catch(error => console.error('Failed to fetch book data:', error));
 });
+
+function displayBooksForCountry(countryId, bookData, bookInfoDiv, genre) {
+    const continent = findContinentForCountry(countryId, bookData);
+    if (!continent) {
+        bookInfoDiv.innerHTML = `<p>No book information available for ${countryId}.</p>`;
+        return;
+    }
+
+    const books = bookData[continent][genre];
+    bookInfoDiv.innerHTML = '';
+    books.forEach(book => {
+        if (book.country === countryId) {
+            const bookElement = document.createElement('div');
+            bookElement.className = 'book';
+            bookElement.innerHTML = `
+                <strong>Rank:</strong> ${book.rank}<br>
+                <strong>Title:</strong> ${book.title}<br>
+                <strong>Author:</strong> ${book.author}<br>
+                <strong>Rating:</strong> ${book.rating} Stars<br>
+                <strong>Year:</strong> ${book.year}<br>
+                <strong>Reviews:</strong> ${book.reviews}<br>
+                <a href="${book.link}" target="_blank">View on Amazon</a>
+            `;
+            bookInfoDiv.appendChild(bookElement);
+        }
+    });
+}
+
+function findContinentForCountry(countryId, bookData) {
+    for (let continent in bookData) {
+        if (Object.values(bookData[continent]).flat().some(book => book.country === countryId)) {
+            return continent;
+        }
+    }
+    return null;
+}
