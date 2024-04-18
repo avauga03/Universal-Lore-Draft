@@ -57,6 +57,10 @@ body, h1, h2, h3, p, ul, li, a {
     fill: #34B233; 
 }
 
+.selected {
+  stroke: #FF0000; /* Outline or other visual effect for selected countries */
+}
+
 svg {
     width: 80vw; /* This is make sure the width is at 80% */
     height: auto; /* This is to maintain the height across different screens */
