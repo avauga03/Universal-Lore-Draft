@@ -17,21 +17,12 @@ document.addEventListener('DOMContentLoaded', function() {
 /*The addEventListener() method of the EventTarget interface sets up a function that will be called whenever the specified event is delivered to the target*/
 /* https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener */
 
-    svgMap.querySelectorAll('path').forEach(function(path) {
-        path.addEventListener('mouseenter', function() {
-            this.classList.add('hover-effect');
-        });
-
-        path.addEventListener('mouseleave', function() {
-            this.classList.remove('hover-effect');
-        });
-    });
-});
-
 document.addEventListener('DOMContentLoaded', function() {
     const svgMap = document.querySelector('#svg-map');
     const bookInfoDiv = document.querySelector('#book-info');
-    if (svgMap && bookInfoDiv) {
+    const genreSelect = document.querySelector('#genre-select');  // Select the genre dropdown
+
+    if (svgMap && bookInfoDiv && genreSelect) {
         fetch('https://avauga03.github.io/Universal-Lore-Draft/assets/bookdata.json')
             .then(response => {
                 if (!response.ok) {
@@ -46,11 +37,22 @@ document.addEventListener('DOMContentLoaded', function() {
                     path.addEventListener('click', () => {
                         const continent = findContinentForCountry(path.id, data);
                         if (continent) {
-                            displayBooksForCountry(path.id, data[continent], bookInfoDiv);
+                            displayBooksForCountry(path.id, data[continent], bookInfoDiv, genreSelect.value);
                         } else {
                             bookInfoDiv.innerHTML = `<p>No book information available for ${path.id}</p>`;
                         }
                     });
+                });
+
+                // Handle genre selection changes
+                genreSelect.addEventListener('change', () => {
+                    const selectedPath = svgMap.querySelector('.selected'); // Assume a class to mark selected country
+                    if (selectedPath) {
+                        const continent = findContinentForCountry(selectedPath.id, data);
+                        if (continent) {
+                            displayBooksForCountry(selectedPath.id, data[continent], bookInfoDiv, genreSelect.value);
+                        }
+                    }
                 });
             })
             .catch(error => {
@@ -58,3 +60,38 @@ document.addEventListener('DOMContentLoaded', function() {
             });
     }
 });
+
+function highlightCountry() {
+    this.classList.add('hover-effect');
+}
+
+function removeHighlight() {
+    this.classList.remove('hover-effect');
+}
+
+function displayBooksForCountry(countryId, continentData, bookInfoDiv, genre) {
+    console.log("Displaying books for:", countryId, "in genre:", genre);
+    const books = continentData[genre] || [];
+    bookInfoDiv.innerHTML = '';
+
+    if (books.length > 0) {
+        books.sort((a, b) => a.rank - b.rank).forEach(book => {
+            const bookElement = document.createElement('div');
+            bookElement.className = 'book';
+            bookElement.textContent = `${book.rank}. ${book.title} by ${book.author} (${book.year})`;
+            bookInfoDiv.appendChild(bookElement);
+        });
+    } else {
+        bookInfoDiv.innerHTML = `<p>No books available for ${genre} in ${countryId}</p>`;
+    }
+}
+
+function findContinentForCountry(countryId, bookData) {
+    // This function determines the continent for the given country
+    for (let continent in bookData) {
+        if (Object.values(bookData[continent]).flat().some(book => book.country === countryId)) {
+            return continent;
+        }
+    }
+    return null; // Return null if no continent is found (handle this case in your UI)
+}
