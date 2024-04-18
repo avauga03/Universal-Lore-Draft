@@ -5,12 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Fetch the book data from the JSON file
     fetch('https://avauga03.github.io/Universal-Lore-Draft/assets/bookdata.json')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok: ' + response.statusText);
-            }
-            return response.json();
-        })
+        .then(response => response.json())
         .then(data => {
             svgMap.querySelectorAll('path').forEach(path => {
                 // Hover effects
@@ -36,25 +31,32 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function displayBooksForCountry(country, bookData, bookInfoDiv, genre) {
     const continent = findContinentForCountry(country, bookData);
-    bookInfoDiv.innerHTML = '';
+    bookInfoDiv.innerHTML = ''; // Clear previous data
     if (continent) {
         const books = bookData[continent][genre] || [];
-        books.forEach(book => {
-            const bookElement = document.createElement('div');
-            bookElement.className = 'book';
-            bookElement.innerHTML = `
-                <strong>Rank:</strong> ${book.rank}<br>
-                <strong>Title:</strong> ${book.title}<br>
-                <strong>Author:</strong> ${book.author}<br>
-                <strong>Rating:</strong> ${book.rating} Stars<br>
-                <strong>Year:</strong> ${book.year}<br>
-                <strong>Reviews:</strong> ${book.reviews}<br>
-                <a href="${book.link}" target="_blank">View on Amazon</a>
-            `;
-            bookInfoDiv.appendChild(bookElement);
-        });
+        const filteredBooks = books.filter(book => book.country === country); // Filter books specific to the country
+        if (filteredBooks.length > 0) {
+            // Add country name at the top
+            bookInfoDiv.innerHTML += `<h2>Country: ${country}</h2>`;
+            filteredBooks.forEach(book => {
+                const bookElement = document.createElement('div');
+                bookElement.className = 'book';
+                bookElement.innerHTML = `
+                    <strong>Rank:</strong> ${book.rank}<br>
+                    <strong>Title:</strong> ${book.title}<br>
+                    <strong>Author:</strong> ${book.author}<br>
+                    <strong>Rating:</strong> ${book.rating} Stars<br>
+                    <strong>Year:</strong> ${book.year}<br>
+                    <strong>Reviews:</strong> ${book.reviews}<br>
+                    <a href="${book.link}" target="_blank">View on Amazon</a>
+                `;
+                bookInfoDiv.appendChild(bookElement);
+            });
+        } else {
+            bookInfoDiv.innerHTML += `<p>No books found for ${genre} in ${country}.</p>`;
+        }
     } else {
-        bookInfoDiv.innerHTML = `<p>No books found for ${genre} in ${country}.</p>`;
+        bookInfoDiv.innerHTML = `<p>No continent data available for ${country}.</p>`;
     }
 }
 
