@@ -1,15 +1,18 @@
 document.addEventListener('DOMContentLoaded', function() {
+    const svgMap = document.querySelector('#svg-map');
+    const bookInfoDiv = document.querySelector('#book-info');
+    const genreSelect = document.querySelector('#genre-select');
+
     fetch('https://avauga03.github.io/Universal-Lore-Draft/assets/bookdata.json')
         .then(response => response.json()) // Assumes response is always OK for simplicity
         .then(data => {
-            const svgMap = document.querySelector('#svg-map');
-            const bookInfoDiv = document.querySelector('#book-info');
-            const genreSelect = document.querySelector('#genre-select');
-
             svgMap.querySelectorAll('path').forEach(path => {
                 path.addEventListener('mouseenter', () => path.classList.add('hover-effect'));
                 path.addEventListener('mouseleave', () => path.classList.remove('hover-effect'));
-                path.addEventListener('click', () => displayBooksForCountry(path.id, data, bookInfoDiv, genreSelect.value));
+                path.addEventListener('click', function() {
+                    this.classList.add('selected'); // Add 'selected' class for visual feedback
+                    displayBooksForCountry(this.id, data, bookInfoDiv, genreSelect.value);
+                });
             });
 
             genreSelect.addEventListener('change', () => {
@@ -32,20 +35,18 @@ function displayBooksForCountry(countryId, bookData, bookInfoDiv, genre) {
     const books = bookData[continent][genre];
     bookInfoDiv.innerHTML = '';
     books.forEach(book => {
-        if (book.country === countryId) {
-            const bookElement = document.createElement('div');
-            bookElement.className = 'book';
-            bookElement.innerHTML = `
-                <strong>Rank:</strong> ${book.rank}<br>
-                <strong>Title:</strong> ${book.title}<br>
-                <strong>Author:</strong> ${book.author}<br>
-                <strong>Rating:</strong> ${book.rating} Stars<br>
-                <strong>Year:</strong> ${book.year}<br>
-                <strong>Reviews:</strong> ${book.reviews}<br>
-                <a href="${book.link}" target="_blank">View on Amazon</a>
-            `;
-            bookInfoDiv.appendChild(bookElement);
-        }
+        const bookElement = document.createElement('div');
+        bookElement.className = 'book';
+        bookElement.innerHTML = `
+            <strong>Rank:</strong> ${book.rank}<br>
+            <strong>Title:</strong> ${book.title}<br>
+            <strong>Author:</strong> ${book.author}<br>
+            <strong>Rating:</strong> ${book.rating} Stars<br>
+            <strong>Year:</strong> ${book.year}<br>
+            <strong>Reviews:</strong> ${book.reviews}<br>
+            <a href="${book.link}" target="_blank">View on Amazon</a>
+        `;
+        bookInfoDiv.appendChild(bookElement);
     });
 }
 
@@ -55,5 +56,5 @@ function findContinentForCountry(countryId, bookData) {
             return continent;
         }
     }
-    return null;
+    return null; // Return null if no continent is found (should handle this case in your UI)
 }
