@@ -17,29 +17,15 @@ document.addEventListener('DOMContentLoaded', function() {
 /*The addEventListener() method of the EventTarget interface sets up a function that will be called whenever the specified event is delivered to the target*/
 /* https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener */
 
-document.addEventListener('DOMContentLoaded', function() {
-    const svgMap = document.querySelector('#svg-map');
-    const bookInfoDiv = document.querySelector('#book-info');
-    const genreSelect = document.querySelector('#genre-select');  // Select the genre dropdown
+    svgMap.querySelectorAll('path').forEach(function(path) {
+        path.addEventListener('mouseenter', function() {
+            this.classList.add('hover-effect');
+        });
 
-    if (svgMap && bookInfoDiv && genreSelect) {
-        fetch('https://avauga03.github.io/Universal-Lore-Draft/assets/bookdata.json')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok: ' + response.statusText);
-                }
-                return response.json();
-            })
-            .then(data => {
-                svgMap.querySelectorAll('path').forEach(path => {
-                    path.addEventListener('mouseenter', highlightCountry);
-                    path.addEventListener('mouseleave', removeHighlight);
-                    path.addEventListener('click', () => {
-                        const continent = findContinentForCountry(path.id, data);
-                        if (continent) {
-                            displayBooksForCountry(path.id, data[continent], bookInfoDiv, genreSelect.value);
-                        } else {
-                            bookInfoDiv.innerHTML = `<p>No book information available for ${path.id}</p>`;
-                        }
-                    });
-                });
+        path.addEventListener('mouseleave', function() {
+            this.classList.remove('hover-effect');
+        });
+    });
+});
+
+/
