@@ -29,43 +29,32 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 document.addEventListener('DOMContentLoaded', function() {
-    const url = 'https://avauga03.github.io/Universal-Lore-Draft/assets/bookdata.json';
-    fetch(url)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok: ' + response.statusText);
-            }
-            return response.json();
-        })
-        .then(data => {
-            initializeMapInteractions(data);
-        })
-        .catch(error => {
-            console.error('Error fetching the book data:', error);
-        });
-});
-
-function initializeMapInteractions(bookData) {
     const svgMap = document.querySelector('#svg-map');
-    svgMap.querySelectorAll('path').forEach(function(path) {
-        path.addEventListener('mouseenter', highlightCountry);
-        path.addEventListener('mouseleave', removeHighlight);
-        path.addEventListener('click', function() {
-            displayBooksForCountry(this.id, bookData);
-        });
-    });
-}
-
-function highlightCountry() {
-    this.classList.add('hover-effect');
-}
-
-function removeHighlight() {
-    this.classList.remove('hover-effect');
-}
-
-function displayBooksForCountry(countryId, bookData) {
-    // Example: This function needs real implementation details based on your JSON structure
     const bookInfoDiv = document.querySelector('#book-info');
-    bookInfoDiv.innerHTML = `<p>Books for ${countryId}</p>`; // Placeholder content
-}
+    if (svgMap && bookInfoDiv) {
+        fetch('https://avauga03.github.io/Universal-Lore-Draft/assets/bookdata.json')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok: ' + response.statusText);
+                }
+                return response.json();
+            })
+            .then(data => {
+                svgMap.querySelectorAll('path').forEach(path => {
+                    path.addEventListener('mouseenter', highlightCountry);
+                    path.addEventListener('mouseleave', removeHighlight);
+                    path.addEventListener('click', () => {
+                        const continent = findContinentForCountry(path.id, data);
+                        if (continent) {
+                            displayBooksForCountry(path.id, data[continent], bookInfoDiv);
+                        } else {
+                            bookInfoDiv.innerHTML = `<p>No book information available for ${path.id}</p>`;
+                        }
+                    });
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching the book data:', error);
+            });
+    }
+});
