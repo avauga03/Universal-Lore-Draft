@@ -67,6 +67,11 @@ body, h1, h2, h3, p, ul, li, a {
   padding-bottom: 10px;
 }
 
+.genre-highlight {
+  stroke: #ff0000; /* Red outline */
+  stroke-width: 2; /* Make the outline thicker */
+}
+
 svg {
     width: 80vw; /* This is make sure the width is at 80% */
     height: auto; /* This is to maintain the height across different screens */
