@@ -60,7 +60,6 @@ function displayBooksForCountry(country, bookData, bookInfoDiv, genre) {
     }
 }
 
-
 function findContinentForCountry(country, bookData) {
     for (let continent in bookData) {
         if (Object.values(bookData[continent]).flat().some(book => book.country === country)) {
