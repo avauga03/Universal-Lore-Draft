@@ -1,15 +1,22 @@
-/*This makes sure the HTML loads first and selects SVG map element, the book info display area, and the genre dropdown */
+/*This makes sure the HTML loads first and selects the elements for the SVG map, book info display area, and genre dropdown */
+/* Ref: https://codepen.io/pasengop/pen/ZEVzvYa */
+/* Ref: https://developer.mozilla.org/en-US/docs/Web/API/Document/DOMContentLoaded_event */ 
+/* Ref: https://www.javascripttutorial.net/javascript-dom/javascript-queryselector/ */
 document.addEventListener('DOMContentLoaded', function() {
     const svgMap = document.querySelector('#svg-map');
     const bookInfo = document.querySelector('#book-info');
     const genreSelect = document.querySelector('#genre-select');
 
+/* This Fetch gets the book data from the JSON file saved Github */
+/* Ref: https://www.digitalocean.com/community/tutorials/how-to-use-the-javascript-fetch-api-to-get-data */
+/* Add and event listener so when the mouse hovers over and leaves each path */
+/* https://codepen.io/pasengop/pen/ZEVzvYa  */
     fetch('https://avauga03.github.io/Universal-Lore-Draft/assets/bookdata.json')
         .then(response => response.json())
         .then(data => {
             svgMap.querySelectorAll('path').forEach(path => {
-                path.addEventListener('mouseenter', () => toggleHighlight(path, true));
-                path.addEventListener('mouseleave', () => toggleHighlight(path, false));
+                path.addEventListener('mouseenter', () => mouseHighlight(path, true));
+                path.addEventListener('mouseleave', () => mouseHighlight(path, false));
                 path.addEventListener('click', () => displayBooks(path.dataset.country, data, bookInfo, genreSelect.value));
             });
             genreSelect.addEventListener('change', () => updateHighlights(genreSelect.value, data));
@@ -18,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function() {
         .catch(error => console.error('Error fetching the book data:', error));
 });
 
-function toggleHighlight(path, highlight) {
+function mouseHighlight(path, highlight) {
     document.querySelectorAll(`[data-country="${path.dataset.country}"]`).forEach(p => {
         p.classList.toggle('hover-effect', highlight);
     });
