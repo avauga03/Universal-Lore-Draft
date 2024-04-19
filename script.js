@@ -1,3 +1,4 @@
+/*This makes sure the HTML loads first */
 document.addEventListener('DOMContentLoaded', function() {
     const svgMap = document.querySelector('#svg-map');
     const bookInfoDiv = document.querySelector('#book-info');
