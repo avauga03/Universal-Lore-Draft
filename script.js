@@ -38,18 +38,13 @@ function displayBooks(country, bookData, bookInfo, genre) {
                 <strong>Author:</strong> ${book.author}<br>
                 <strong>Global Rating:</strong> ${book.rating} Stars<br>
                 <strong>Publication Year:</strong> ${book.year}<br>
-                <strong>Customer 
-                
-                
-                
-                Reviews:</strong> ${book.reviews}<br>
+                <strong>Customer Reviews:</strong> ${book.reviews}<br>
                 <a href="${book.link}" target="_blank">View on Amazon</a>
             `;
             bookInfo.appendChild(bookElement);
         });
     } else {
-        bookInfo
-        .innerHTML += `<p>No books found for ${genre} in ${country}.</p>`;
+        bookInfo.innerHTML += `<p>No books found for ${genre} in ${country}.</p>`;
     }
 }
 
