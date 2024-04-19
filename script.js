@@ -1,7 +1,7 @@
-/*This makes sure the HTML loads first */
+/*This makes sure the HTML loads first and selects SVG map element, the book info display area, and the genre dropdown */
 document.addEventListener('DOMContentLoaded', function() {
     const svgMap = document.querySelector('#svg-map');
-    const bookInfoDiv = document.querySelector('#book-info');
+    const bookInfo = document.querySelector('#book-info');
     const genreSelect = document.querySelector('#genre-select');
 
     fetch('https://avauga03.github.io/Universal-Lore-Draft/assets/bookdata.json')
@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
             svgMap.querySelectorAll('path').forEach(path => {
                 path.addEventListener('mouseenter', () => toggleHighlight(path, true));
                 path.addEventListener('mouseleave', () => toggleHighlight(path, false));
-                path.addEventListener('click', () => displayBooks(path.dataset.country, data, bookInfoDiv, genreSelect.value));
+                path.addEventListener('click', () => displayBooks(path.dataset.country, data, bookInfo, genreSelect.value));
             });
             genreSelect.addEventListener('change', () => updateHighlights(genreSelect.value, data));
             updateHighlights(genreSelect.value, data); // Initial highlight update
@@ -24,9 +24,9 @@ function toggleHighlight(path, highlight) {
     });
 }
 
-function displayBooks(country, bookData, bookInfoDiv, genre) {
+function displayBooks(country, bookData, bookInfo, genre) {
     const continent = findContinent(country, bookData);
-    bookInfoDiv.innerHTML = `<h2>Country: ${country}</h2>`;
+    bookInfo.innerHTML = `<h2>Country: ${country}</h2>`;
     if (continent && bookData[continent][genre]) {
         const books = bookData[continent][genre].filter(book => book.country === country);
         books.forEach(book => {
@@ -34,17 +34,22 @@ function displayBooks(country, bookData, bookInfoDiv, genre) {
             bookElement.className = 'book';
             bookElement.innerHTML = `
                 <strong>Popularity Rank in Continent:</strong> ${book['Popularity Rank in Continent']}<br>
-                <strong>Title:</strong> ${book.title}<br>
+                <strong>Book Title:</strong> ${book.title}<br>
                 <strong>Author:</strong> ${book.author}<br>
-                <strong>Rating:</strong> ${book.rating} Stars<br>
-                <strong>Year:</strong> ${book.year}<br>
-                <strong>Reviews:</strong> ${book.reviews}<br>
+                <strong>Global Rating:</strong> ${book.rating} Stars<br>
+                <strong>Publication Year:</strong> ${book.year}<br>
+                <strong>Customer 
+                
+                
+                
+                Reviews:</strong> ${book.reviews}<br>
                 <a href="${book.link}" target="_blank">View on Amazon</a>
             `;
-            bookInfoDiv.appendChild(bookElement);
+            bookInfo.appendChild(bookElement);
         });
     } else {
-        bookInfoDiv.innerHTML += `<p>No books found for ${genre} in ${country}.</p>`;
+        bookInfo
+        .innerHTML += `<p>No books found for ${genre} in ${country}.</p>`;
     }
 }
 
