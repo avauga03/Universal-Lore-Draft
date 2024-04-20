@@ -15,12 +15,13 @@
             <div class="nav-items">
                 <a href="about.html" class="button">ABOUT</a>
             </div>
-   <!-- Ssearch bar doesn't work, just for show  -->
+   <!-- Search bar doesn't work, just for show  -->
                     <div class="search-bar">
                       <input type="text" placeholder="Search the website" id="searhbox">
                   </div>
         </nav>
     </header>
+    <!-- Dropdown for the genres to be selected -->
     <label for="genre-select">Please choose a genre to discover books around the world.:</label>
     <select id="genre-select">
         <option value="Autobiography">Autobiography</option>
@@ -1009,11 +1010,13 @@
          </circle>
         </svg>
     </section>
+    <!-- End of Simplemaps.com, note I ADDED DATA-COUNTRY AND THE RELEVANT COUNTRY INTO EACH PATH OF THIS MAP -->
     <section id="book-info">
         <!-- This is where the book details will appear when a country is clicked -->
         <h2>Book Information</h2>
-        <!-- The book details will be dynamically inserted here by the JavaScript -->
+        <!-- The book data will be generated here by JavaScript -->
     </section>
+    <!-- purposefully put last, as the page wasn't loading the HTML correctly when it was higher up -->
     <script src="script.js"></script>
 </body>
 </html>

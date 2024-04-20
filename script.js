@@ -9,18 +9,20 @@ document.addEventListener('DOMContentLoaded', function() {
 
 /* This Fetch gets the book data from the JSON file saved Github */
 /* Ref: https://www.digitalocean.com/community/tutorials/how-to-use-the-javascript-fetch-api-to-get-data */
-/* Add and event listener so when the mouse hovers over and leaves each path */
-/* https://codepen.io/pasengop/pen/ZEVzvYa  */
+/* Add an event listener so when the mouse hovers over, clicks, and leaves each path */
+/* Ref: https://codepen.io/pasengop/pen/ZEVzvYa  */
+/* Ref: https://codepen.io/noirsociety/pen/YzdyoQq */
+/* Ref: https://codepen.io/jzpeepz/pen/PoKBWyP */
     fetch('https://avauga03.github.io/Universal-Lore-Draft/assets/bookdata.json')
         .then(response => response.json())
         .then(data => {
             svgMap.querySelectorAll('path').forEach(path => {
                 path.addEventListener('mouseenter', () => mouseHighlight(path, true));
                 path.addEventListener('mouseleave', () => mouseHighlight(path, false));
-                path.addEventListener('click', () => displayBooks(path.dataset.country, data, bookInfo, genreSelect.value));
+                path.addEventListener('click', () => showBooks(path.dataset.country, data, bookInfo, genreSelect.value));
             });
-            genreSelect.addEventListener('change', () => updateHighlights(genreSelect.value, data));
-            updateHighlights(genreSelect.value, data); // Initial highlight update
+            genreSelect.addEventListener('change', () => countryHighlights(genreSelect.value, data));
+            countryHighlights(genreSelect.value, data); // Initial highlight update
         })
         .catch(error => console.error('Error fetching the book data:', error));
 });
@@ -31,7 +33,7 @@ function mouseHighlight(path, highlight) {
     });
 }
 
-function displayBooks(country, bookData, bookInfo, genre) {
+function showBooks(country, bookData, bookInfo, genre) {
     const continent = findContinent(country, bookData);
     bookInfo.innerHTML = `<h2>Country: ${country}</h2>`;
     if (continent && bookData[continent][genre]) {
@@ -55,7 +57,7 @@ function displayBooks(country, bookData, bookInfo, genre) {
     }
 }
 
-function updateHighlights(genre, bookData) {
+function countryHighlights(genre, bookData) {
     document.querySelectorAll('.genre-highlight').forEach(path => path.classList.remove('genre-highlight'));
     Object.values(bookData).forEach(region => {
         (region[genre] || []).forEach(book => {

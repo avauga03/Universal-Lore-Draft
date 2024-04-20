@@ -1,4 +1,4 @@
-/* This is the navigation bar that needs to be consistent */
+/* This is the navigation bar that would be applied across other webpages (if they existed) */
 body, h1, h2, h3, p, ul, li, a {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -8,7 +8,7 @@ body, h1, h2, h3, p, ul, li, a {
     list-style: none;
     font-weight: normal; 
   }
-  /* this is turn the top navbar purple */
+  /* this is turn the top navbar green */
   .topnav {
     align-items: center;
     background-color: #34B233;
@@ -20,7 +20,7 @@ body, h1, h2, h3, p, ul, li, a {
     text-align: center;
   }
   
-  /* ths is show how the website name to look, in terms of having a larger size and a white colour (against the purple background) 4B33FF */
+  /* ths is to adjust the size and position of the website name */
   .website-name {
     text-decoration: none;
     font-size: 42px;
@@ -28,7 +28,7 @@ body, h1, h2, h3, p, ul, li, a {
     margin-right: auto;
   }
     
-  /*this is to change the button specifically to gold */
+  /*this is to change the button specifically to blue with black letters */
   .nav-items a.button {
     background-color: #2E38FF;
     color: #000000;
@@ -52,29 +52,29 @@ body, h1, h2, h3, p, ul, li, a {
 
 
 
-/* the colour of the hover when you go over the country */
+/* when the mouse goes over a country it should trun green */
 .hover-effect {
     fill: #34B233; 
 }
 
 .selected {
-  stroke: #FF0000; /* Outline or other visual effect for selected countries */
+  stroke: #FF0000; /* Red border line when a country is selected */
 }
 
 .book {
-  margin-bottom: 10px;
-  border-bottom: 1px solid #ccc;
-  padding-bottom: 10px;
+  margin-bottom: 10px; /* thickness of the margin area*/
+  border-bottom: 1px solid #ccc; /* Border width and colour */
+  padding-bottom: 10px; /* thickness of the padding area */
 }
 
 .genre-highlight {
-  stroke: #ff0000; /* Red outline */
-  stroke-width: 2; /* Make the outline thicker */
+  stroke: #ff0000; /* This is to create a red outline */
+  stroke-width: 2; /* This is to make the outline bolder */
 }
 
 svg {
-    width: 80vw; /* This is make sure the width is at 80% */
-    height: auto; /* This is to maintain the height across different screens */
+    width: 80vw; /* Make the width 80% */
+    height: auto; /* Make sure the height automatically fits across various application */
     display: block;
-    margin: 0 auto; /* This is to put the SVG in the centre of the screen horizontally */
+    margin: 0 auto; /* Map is horizontally in the middle of the webpage  */
 }
