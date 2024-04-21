@@ -13,6 +13,10 @@ document.addEventListener('DOMContentLoaded', function() {
 /* Ref: https://codepen.io/pasengop/pen/ZEVzvYa  */
 /* Ref: https://codepen.io/noirsociety/pen/YzdyoQq */
 /* Ref: https://codepen.io/jzpeepz/pen/PoKBWyP */
+/* Using an Immediately-Invoked Function Expression, the countries highlight immediately as soon as you choose the genre */
+/* Ref: https://developer.mozilla.org/en-US/docs/Glossary/IIFE */
+/* Promise.prototype.catch() for catching errors */
+/* Ref: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/catch */
     fetch('https://avauga03.github.io/Universal-Lore-Draft/assets/bookdata.json')
         .then(response => response.json())
         .then(data => {
@@ -22,17 +26,29 @@ document.addEventListener('DOMContentLoaded', function() {
                 path.addEventListener('click', () => showBooks(path.dataset.country, data, bookInfo, genreSelect.value));
             });
             genreSelect.addEventListener('change', () => countryHighlights(genreSelect.value, data));
-            countryHighlights(genreSelect.value, data); // Initial highlight update
+            countryHighlights(genreSelect.value, data); 
         })
-        .catch(error => console.error('Error fetching the book data:', error));
+        .catch(error => console.error('There is an error when trying to fetch the book data:', error));
 });
 
+/* This Toggles the 'hover-effect' class based on when the mouse enters the path or leaves it */ 
+/* Ref: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals */
+/* Ref: https://www.javascripttutorial.net/javascript-dom/javascript-classlist/ */
 function mouseHighlight(path, highlight) {
-    document.querySelectorAll(`[data-country="${path.dataset.country}"]`).forEach(p => {
-        p.classList.toggle('hover-effect', highlight);
+    document.querySelectorAll(`[data-country="${path.dataset.country}"]`).forEach(svgPath => {
+        svgPath.classList.toggle('hover-effect', highlight);
     });
 }
 
+/* The function chooses the continent for the country and then retrieves the book data */
+/* Ref: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals */
+/* Ref: https://developer.mozilla.org/en-US/docs/Web/API/Element/innerHTML */
+/* Find the books chosen on the data structure and filter on the books that equal the condition set*/
+/* Ref: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Strict_equality */
+/* Then show the book information on the webpage using append */
+/* Ref: https://developer.mozilla.org/en-US/docs/Web/API/Node/appendChild */
+/* If the condition is false, a message is provided saying there are no books */
+/* Ref: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Control_flow_and_error_handling */
 function showBooks(country, bookData, bookInfo, genre) {
     const continent = findContinent(country, bookData);
     bookInfo.innerHTML = `<h2>Country: ${country}</h2>`;
@@ -53,10 +69,11 @@ function showBooks(country, bookData, bookInfo, genre) {
             bookInfo.appendChild(bookElement);
         });
     } else {
-        bookInfo.innerHTML += `<p>No books found for ${genre} in ${country}.</p>`;
+        bookInfo.innerHTML += `<p>There are no books found for ${genre} in ${country}.</p>`;
     }
 }
 
+/* This function */
 function countryHighlights(genre, bookData) {
     document.querySelectorAll('.genre-highlight').forEach(path => path.classList.remove('genre-highlight'));
     Object.values(bookData).forEach(region => {

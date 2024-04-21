@@ -52,7 +52,7 @@ body, h1, h2, h3, p, ul, li, a {
 
 
 
-/* when the mouse goes over a country it should trun green */
+/* when the mouse goes over a country it should turn green */
 .hover-effect {
     fill: #34B233; 
 }
