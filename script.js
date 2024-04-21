@@ -73,7 +73,12 @@ function showBooks(country, bookData, bookInfo, genre) {
     }
 }
 
-/* This function  */
+/* This function highlights the SVG map according to the genre selected */
+/* Then removes any highlights of countries of whoms books are are not within the selected genre */
+/* Then goes back to the countries that are part of the selected countries genre */
+/* Ref: https://developer.mozilla.org/en-US/docs/Web/API/NodeList/forEach */
+/* Ref: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/values */
+/* Ref: https://www.javascripttutorial.net/javascript-dom/javascript-classlist/ */
 function countryHighlights(genre, bookData) {
     document.querySelectorAll('.genre-highlight').forEach(path => path.classList.remove('genre-highlight'));
     Object.values(bookData).forEach(geographicalArea  => {
@@ -84,7 +89,9 @@ function countryHighlights(genre, bookData) {
         });
     });
 }
-
+/* The object and arrays find where the continent is in the dataset */
+/* Ref: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/flat */
+/* Ref: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/some */
 function findContinent(country, bookData) {
     return Object.keys(bookData).find(continent => 
         Object.values(bookData[continent]).flat().some(book => book.country === country)
