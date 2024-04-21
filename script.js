@@ -1,4 +1,4 @@
-/*This makes sure the HTML loads first and selects the elements for the SVG map, book info display area, and genre dropdown */
+/* This makes sure the HTML loads first and selects the elements for the SVG map, book info display area, and genre dropdown */
 /* Ref: https://codepen.io/pasengop/pen/ZEVzvYa */
 /* Ref: https://developer.mozilla.org/en-US/docs/Web/API/Document/DOMContentLoaded_event */ 
 /* Ref: https://www.javascripttutorial.net/javascript-dom/javascript-queryselector/ */
@@ -73,11 +73,11 @@ function showBooks(country, bookData, bookInfo, genre) {
     }
 }
 
-/* This function */
+/* This function  */
 function countryHighlights(genre, bookData) {
     document.querySelectorAll('.genre-highlight').forEach(path => path.classList.remove('genre-highlight'));
-    Object.values(bookData).forEach(region => {
-        (region[genre] || []).forEach(book => {
+    Object.values(bookData).forEach(geographicalArea  => {
+        (geographicalArea[genre] || []).forEach(book => {
             document.querySelectorAll(`[data-country="${book.country}"]`).forEach(path => {
                 path.classList.add('genre-highlight');
             });
