@@ -89,7 +89,9 @@ function countryHighlights(genre, bookData) {
         });
     });
 }
+
 /* The object and arrays find where the continent is in the dataset */
+/* Ref: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/find */
 /* Ref: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/flat */
 /* Ref: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/some */
 function findContinent(country, bookData) {
